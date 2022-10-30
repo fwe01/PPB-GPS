@@ -12,4 +12,8 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="update_lokasi">Update Data Lokasi</string>
+    <string name="map_view">MapView</string>
+    <string name="current_location">Lokasi Saat Ini</string>
+    <string name="map_fragment_label">Map Fragment</string>
+    <string name="lihat_lokasi">Lihat Lokasi</string>
 </resources>

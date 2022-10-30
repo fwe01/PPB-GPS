@@ -2,6 +2,7 @@ package com.example.ppb_gps;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -24,6 +25,7 @@ import com.example.ppb_gps.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,6 +52,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //tempel fragment
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .setReorderingAllowed(true)
+                    .add(R.id.fragment_container_view, MapsFragment.class, null)
+                    .commit();
+        }
+
+
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         location_manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -65,6 +76,18 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "Updating Location",
                     Toast.LENGTH_LONG).show();
         });
+
+        binding.btnPindah.setOnClickListener(view -> {
+            EditText lat = (EditText) findViewById(R.id.idLokasiLat);
+            EditText lng = (EditText) findViewById(R.id.idLokasiLng);
+            EditText zoom = (EditText) findViewById(R.id.idZoom);
+            Double dbllat = Double.parseDouble(lat.getText().toString());
+            Double dbllng = Double.parseDouble(lng.getText().toString());
+            Float dblzoom = Float.parseFloat(zoom.getText().toString());
+            Toast.makeText(this, "Move to Lat:" + dbllat + " Long:" + dbllng, Toast.LENGTH_LONG).show();
+            gotoPeta(dbllat, dbllng, dblzoom);
+        });
+
     }
 
     @Override
