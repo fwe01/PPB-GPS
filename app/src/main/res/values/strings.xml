@@ -16,4 +16,7 @@
     <string name="current_location">Lokasi Saat Ini</string>
     <string name="map_fragment_label">Map Fragment</string>
     <string name="lihat_lokasi">Lihat Lokasi</string>
+    <string name="zoom">Zoom</string>
+    <string name="nama_lokasi">Cari Lokasi</string>
+    <string name="tipe_peta">Tipe Peta</string>
 </resources>

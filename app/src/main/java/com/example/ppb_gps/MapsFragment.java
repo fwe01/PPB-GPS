@@ -8,6 +8,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,33 +21,66 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsFragment extends Fragment {
-
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
-
-        /**
-         * Manipulates the map once available.
-         * This callback is triggered when the map is ready to be used.
-         * This is where we can add markers or lines, add listeners or move the camera.
-         * In this case, we just add a marker near Sydney, Australia.
-         * If Google Play services is not installed on the device, the user will be prompted to
-         * install it inside the SupportMapFragment. This method will only be triggered once the
-         * user has installed Google Play services and returned to the app.
-         */
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            LatLng ITS = new LatLng(-7.2819705,112.795323);
-            googleMap.addMarker(new MarkerOptions().position(ITS).title("Marker in ITS"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(ITS));
-        }
-    };
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
+    private GoogleMap googleMap;
+    private Spinner spinner;
+    public static String[] MAP_TYPES = {"", "Normal", "Satellite", "Terrain", "Hybrid", "None"};
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        View view = inflater.inflate(R.layout.fragment_maps, container, false);
+
+        initMapTypeDropdown(view);
+        initOnClikListener(view);
+
+        return view;
+    }
+
+    private void initMapTypeDropdown(View view) {
+        spinner = view.findViewById(R.id.edt_tipe_map);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, MAP_TYPES);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Object itemAtPosition = adapterView.getItemAtPosition(i);
+                if ("".equals(itemAtPosition)) {
+                    return;
+                }
+                if ("Satellite".equals(itemAtPosition)) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                } else if ("Terrain".equals(itemAtPosition)) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                } else if ("Hybrid".equals(itemAtPosition)) {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                } else {
+                    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                }
+
+                spinner.setSelection(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
+    private void initOnClikListener(View view) {
+        view.findViewById(R.id.btn_pindah).setOnClickListener(view1 -> {
+            String lat = ((EditText) view.findViewById(R.id.edt_lat)).getText().toString();
+            String lng = ((EditText) view.findViewById(R.id.edt_long)).getText().toString();
+            String zoom = ((EditText) view.findViewById(R.id.edt_zoom)).getText().toString();
+            Double dbllat = Double.parseDouble((lat.equals("") ? "0" : lat));
+            Double dbllng = Double.parseDouble(lng.equals("") ? "0" : lng);
+            float dblzoom = Float.parseFloat(zoom.equals("") ? "0" : zoom);
+            Toast.makeText(getContext(), "Move to Lat:" + dbllat + " Long:" + dbllng, Toast.LENGTH_LONG).show();
+            gotoPeta(dbllat, dbllng, dblzoom);
+        });
     }
 
     @Override
@@ -51,7 +89,26 @@ public class MapsFragment extends Fragment {
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
+            mapFragment.getMapAsync(this);
         }
+    }
+
+    private void gotoPeta(Double lat,
+                          Double lng, float z) {
+        LatLng Lokasibaru = new LatLng(lat, lng);
+        googleMap.addMarker(new MarkerOptions().
+                position(Lokasibaru).
+                title("Marker in  " + lat + ":" + lng));
+        googleMap.moveCamera(CameraUpdateFactory.
+                newLatLngZoom(Lokasibaru, z));
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        LatLng ITS = new LatLng(-7.2819705, 112.795323);
+        googleMap.addMarker(new MarkerOptions().position(ITS).title("Marker in ITS"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ITS, 15));
     }
 }

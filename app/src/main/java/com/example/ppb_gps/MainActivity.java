@@ -9,6 +9,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private LocationManager location_manager;
     private LocationListener location_listener;
+    private GoogleMap googleMap;
 
     private class lokasiListener implements LocationListener {
         @Override
@@ -46,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.LENGTH_LONG).show();
         }
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,29 +71,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         location_manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         location_listener = new lokasiListener();
+        updateLokasiSekarang();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1000);
             return;
         }
 
         binding.btnUpdate.setOnClickListener(view -> {
-            location_manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 200,
-                    location_listener);
+            updateLokasiSekarang();
             Toast.makeText(getBaseContext(), "Updating Location",
                     Toast.LENGTH_LONG).show();
         });
+    }
 
-        binding.btnPindah.setOnClickListener(view -> {
-            EditText lat = (EditText) findViewById(R.id.idLokasiLat);
-            EditText lng = (EditText) findViewById(R.id.idLokasiLng);
-            EditText zoom = (EditText) findViewById(R.id.idZoom);
-            Double dbllat = Double.parseDouble(lat.getText().toString());
-            Double dbllng = Double.parseDouble(lng.getText().toString());
-            Float dblzoom = Float.parseFloat(zoom.getText().toString());
-            Toast.makeText(this, "Move to Lat:" + dbllat + " Long:" + dbllng, Toast.LENGTH_LONG).show();
-            gotoPeta(dbllat, dbllng, dblzoom);
-        });
-
+    private void updateLokasiSekarang() {
+        location_manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 200,
+                location_listener);
     }
 
     @Override
