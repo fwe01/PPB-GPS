@@ -45,10 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private class lokasiListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
-            TextView txtLat = (TextView) binding.txtLat;
-            TextView txtLong = (TextView) binding.txtLong;
-            txtLat.setText(String.valueOf(location.getLatitude()));
-            txtLong.setText(String.valueOf(location.getLongitude()));
+//            TextView txtLat = (TextView) binding.txtLat;
+//            TextView txtLong = (TextView) binding.txtLong;
+//            txtLat.setText(String.valueOf(location.getLatitude()));
+//            txtLong.setText(String.valueOf(location.getLongitude()));
             Toast.makeText(getBaseContext(), "Location Updated",
                     Toast.LENGTH_LONG).show();
         }
@@ -78,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        binding.btnUpdate.setOnClickListener(view -> {
-            updateLokasiSekarang();
-            Toast.makeText(getBaseContext(), "Updating Location",
-                    Toast.LENGTH_LONG).show();
-        });
+//        binding.btnUpdate.setOnClickListener(view -> {
+//            updateLokasiSekarang();
+//            Toast.makeText(getBaseContext(), "Updating Location",
+//                    Toast.LENGTH_LONG).show();
+//        });
     }
 
     private void updateLokasiSekarang() {

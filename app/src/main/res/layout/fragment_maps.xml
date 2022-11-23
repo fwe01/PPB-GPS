@@ -1,127 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_width="match_parent">
-
-    <TextView
-        android:gravity="center"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_width="match_parent"
-        android:text="@string/map_view"
-        android:textSize="20sp" />
-
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_width="match_parent">
-
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:text="@string/latitude" />
-
-            <EditText
-                android:id="@+id/edt_lat"
-                android:inputType="numberDecimal"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:text="@string/longitude" />
-
-            <EditText
-                android:id="@+id/edt_long"
-                android:inputType="numberDecimal"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_width="match_parent">
-
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:text="@string/zoom" />
-
-            <EditText
-                android:id="@+id/edt_zoom"
-                android:inputType="numberDecimal"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_width="wrap_content"
-                android:text="@string/tipe_peta" />
-
-            <Spinner
-                android:id="@+id/edt_tipe_map"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:layout_width="match_parent" />
-
-        </LinearLayout>
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/btn_pindah"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_width="match_parent"
-        android:text="@string/lihat_lokasi" />
+    android:orientation="vertical">
 
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
         tools:context=".MapsFragment" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_weight="0.5">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/latitude" />
+
+            <EditText
+                android:id="@+id/edt_lat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:inputType="numberDecimal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/longitude" />
+
+            <EditText
+                android:id="@+id/edt_long"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:inputType="numberDecimal" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_weight="0.5"
+        android:baselineAligned="false">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/zoom" />
+
+            <EditText
+                android:id="@+id/edt_zoom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:inputType="numberDecimal" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/tipe_peta" />
+
+            <Spinner
+                android:id="@+id/edt_tipe_map"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/alamat" />
+
+            <EditText
+                android:id="@+id/edt_alamat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_pindah_lat_long"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0.5"
+            android:text="@string/lihat_lokasi" />
+    </LinearLayout>
+
 </LinearLayout>
