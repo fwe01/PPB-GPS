@@ -143,13 +143,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private void initMoveLatLongOnClickListener(View view) {
         view.findViewById(R.id.btn_pindah_lat_long).setOnClickListener(view1 -> {
             String alamat = edt_alamat.getText().toString();
+
+            String zoom = edt_zoom.getText().toString();
+            float dblzoom = Float.parseFloat(zoom.equals("") ? "0" : zoom);
+
             if (alamat.equals("")) {
                 String lat = edt_lat.getText().toString();
                 String lng = edt_lng.getText().toString();
-                String zoom = edt_zoom.getText().toString();
                 Double dbllat = Double.parseDouble((lat.equals("") ? "0" : lat));
                 Double dbllng = Double.parseDouble(lng.equals("") ? "0" : lng);
-                float dblzoom = Float.parseFloat(zoom.equals("") ? "0" : zoom);
                 Toast.makeText(getContext(), "Move to Lat:" + dbllat + " Long:" + dbllng, Toast.LENGTH_LONG).show();
                 goToPeta(dbllat, dbllng, dblzoom);
                 return;
@@ -165,7 +167,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     String nemuAlamat = address.getAddressLine(0);
                     double latitude = address.getLatitude();
                     double longitude = address.getLongitude();
-                    goToPeta(latitude, longitude, 16);
+                    goToPeta(latitude, longitude, dblzoom);
 
                     edt_lat.setText(Double.toString(latitude));
                     edt_lng.setText(Double.toString(longitude));
