@@ -2,11 +2,18 @@ package com.example.ppb_gps;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -28,6 +36,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap googleMap;
@@ -46,6 +55,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private EditText edt_alamat;
     private EditText edt_zoom;
 
+    private TextView txt_jarak;
+
+    private LocationManager location_manager;
+    private LocationListener location_listener;
+
+    protected double current_lat;
+    protected double current_lng;
+
+    private class lokasiListener implements LocationListener {
+        @Override
+        public void onLocationChanged(Location location) {
+            current_lat = location.getLatitude();
+            current_lng = location.getLongitude();
+            Toast.makeText(getContext(), "Current Location Updated",
+                    Toast.LENGTH_LONG).show();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -56,12 +83,30 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         edt_lat = view.findViewById(R.id.edt_lat);
         edt_lng = view.findViewById(R.id.edt_long);
         edt_zoom = view.findViewById(R.id.edt_zoom);
+        txt_jarak = view.findViewById(R.id.txt_jarak);
 
         initMapTypeDropdown(view);
         initMoveLatLongOnClickListener(view);
         initMoveLatLongOnClickListener(view);
+        initCurrentLocation();
 
         return view;
+    }
+
+    private void initCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1000);
+        }
+
+        location_manager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
+        location_listener = new lokasiListener();
+
+        updateLokasiSekarang();
+    }
+
+    private void updateLokasiSekarang() {
+        location_manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 200,
+                location_listener);
     }
 
     private void initMapTypeDropdown(View view) {
@@ -118,12 +163,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 if (daftar.size() > 0) {
                     Address address = daftar.get(0);
                     String nemuAlamat = address.getAddressLine(0);
-                    Double lintang = address.getLatitude();
-                    Double bujur = address.getLongitude();
-                    goToPeta(lintang, bujur, 16);
+                    double latitude = address.getLatitude();
+                    double longitude = address.getLongitude();
+                    goToPeta(latitude, longitude, 16);
 
-                    edt_lat.setText(lintang.toString());
-                    edt_lng.setText(bujur.toString());
+                    edt_lat.setText(Double.toString(latitude));
+                    edt_lng.setText(Double.toString(longitude));
+                    txt_jarak.setText(String.valueOf(calculateDistance(current_lat, current_lng, latitude, longitude)));
 
                     Toast.makeText(getContext(), "Location " + nemuAlamat, Toast.LENGTH_LONG).show();
                 }
@@ -166,7 +212,22 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void closeKeyboard(View view) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private float calculateDistance(
+            double lat_start, double lng_start,
+            double lat_destination, double lng_destination) {
+        Location start = new Location("start");
+        Location destination = new Location("destination");
+        destination.setLatitude(lat_destination);
+        destination.setLongitude(lng_destination);
+        start.setLatitude(lat_start);
+        start.setLongitude(lng_start);
+
+        float distance = (float) start.distanceTo(destination) / 1000;
+
+        return distance;
     }
 }

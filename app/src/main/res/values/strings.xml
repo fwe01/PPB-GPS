@@ -20,4 +20,5 @@
     <string name="nama_lokasi">Cari Lokasi</string>
     <string name="tipe_peta">Tipe Peta</string>
     <string name="alamat">Alamat</string>
+    <string name="jarak">Jarak dari lokasi saat ini (KM)</string>
 </resources>
